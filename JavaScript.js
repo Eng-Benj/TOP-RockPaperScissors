@@ -13,30 +13,37 @@ function getComputerChoice(){
     return computerSelection
 }
 
+let computerScore = 0;
+let playerScore = 0;
+const roundDiv = document.querySelector('#round');
+const gameDiv = document.querySelector('#game');
 function playRound(playerSelection , computerSelection) {
-    let outcome
-    if (playerSelection == null || playerSelection.toLowerCase() != ("rock" || "paper" || "scissors")) {console.log("You failed to show rock, paper, or scissors"); outcome = 0}
+    if (playerSelection == null) {roundDiv.textContent = "You failed to show rock, paper, or scissors"}
     else if (playerSelection.toLowerCase() === computerSelection) {
-        console.log("You both chose " + playerSelection.toLowerCase() + "!"); outcome = 1
-    } 
-    else if ((playerSelection.toLowerCase() === "rock" && computerSelection === "scissors") || (playerSelection.toLowerCase() === "paper" && computerSelection === "rock") || (playerSelection.toLowerCase() === "scissors" && computerSelection === "paper"))  {
-        console.log("Your " + playerSelection.toLowerCase() + " beats the computer's " + computerSelection + "!"); outcome = 2
+        roundDiv.textContent = "You both chose " + playerSelection.toLowerCase() + "!"} 
+    else if ((playerSelection.toLowerCase() === "rock" && computerSelection === "scissors") || (playerSelection.toLowerCase() === "paper" && computerSelection === "rock") || (playerSelection.toLowerCase() === "scissors" && computerSelection === "paper")) {
+        roundDiv.textContent = "Your " + playerSelection.toLowerCase() + " beats the computer's " + computerSelection + "!"; playerScore += 1
     }
     else { 
-        console.log("The computer's " + computerSelection + " beats your " + playerSelection.toLowerCase() + "!"); outcome = 0
+        roundDiv.textContent ="The computer's " + computerSelection + " beats your " + playerSelection.toLowerCase() + "!"; computerScore += 1
     }
+    gameDiv.textContent = "The score is " + playerScore + ":" +computerScore 
+    if (computerScore >= 5) {gameDiv.textContent += " - the computer wins!"}
+    else if (playerScore >= 5) {gameDiv.textContent += " - you win!"}
 }
 
-function game() {
-    let score = 0, result
-    for (let i = 0; i < 5; i++ ){
-    score += playRound(prompt("Round " + (i + 1) + " - choose your weapon!"), getComputerChoice())
-    }
-    if (score == 5 ){result = "draw"; console.log("It's a draw!")}
-    else if (score > 5){result = "win"; console.log("You win!")}
-    else {result = "loss"; console.log("You lose!")}
-    let replay = prompt("Do you want to play again? (y/n)")
-    if (replay === "y"){game()}
-}
+const buttons = document.querySelectorAll('.weapon');
+buttons.forEach((button) => {
+    button.addEventListener('click', function() {playRound(button.id , getComputerChoice())});
+});
 
-game()
+const rematch = document.querySelector('#rematch');
+rematch.addEventListener('click', () => {
+    roundDiv.textContent = "Chose your weapon!"
+    gameDiv.textContent = "The score is 0:0"
+    computerScore = 0
+    playerScore = 0
+    buttons.forEach((button) => {
+        button.addEventListener('click', function() {playRound(button.id , getComputerChoice())});
+    });
+})
