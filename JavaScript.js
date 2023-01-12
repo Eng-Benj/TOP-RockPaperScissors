@@ -28,7 +28,8 @@ function playRound(playerSelection , computerSelection) {
         roundDiv.textContent ="The computer's " + computerSelection + " beats your " + playerSelection.toLowerCase() + "!"; computerScore += 1
     }
     gameDiv.textContent = "The score is " + playerScore + ":" +computerScore 
-    if (computerScore >= 5) {gameDiv.textContent += " - the computer wins!"}
+    if ((computerScore>5 || playerScore>5)||(computerScore>=5 && playerScore>=5)) {gameDiv.textContent = "The game is over. Please click 'Rematch' to play again."}
+    else if (computerScore >= 5) {gameDiv.textContent += " - the computer wins!"}
     else if (playerScore >= 5) {gameDiv.textContent += " - you win!"}
 }
 
